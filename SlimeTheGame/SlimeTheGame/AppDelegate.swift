@@ -1,11 +1,6 @@
-//
-//  AppDelegate.swift
-//  SlimeTheGame
-//
-//  Created by MIKHAIL ZHACHKO on 1.06.25.
-//
 
 import UIKit
+import SpriteKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -14,8 +9,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        return true
-    }
+
+            window = UIWindow(frame: UIScreen.main.bounds)
+            let skView = SKView(frame: window!.bounds)
+            let scene = GameScene(size: skView.bounds.size)
+            scene.scaleMode = .aspectFill
+            skView.presentScene(scene)
+
+            let viewController = UIViewController()
+            viewController.view = skView
+
+            window?.rootViewController = viewController
+            window?.makeKeyAndVisible()
+
+            return true
+        }
 
     func applicationWillResignActive(_ application: UIApplication) {}
 

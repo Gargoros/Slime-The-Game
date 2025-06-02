@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "slime_idle_06.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
