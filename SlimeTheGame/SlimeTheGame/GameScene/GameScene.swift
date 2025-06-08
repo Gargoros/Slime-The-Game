@@ -5,12 +5,13 @@ import GameplayKit
 final class GameScene: SKScene {
     //MARK: - Properties
     private var sceneFloor: SKSpriteNode!
+    private var slime = SlimeNode()
+    private var slimeSpeed: CGFloat = 1.5
     //MARK: - Init
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         sceneSetup()
     }
-    
 }
 
 //MARK: - Scene setups
@@ -41,10 +42,23 @@ extension GameScene {
         addChild(sceneFloor)
     }
     private func sceneSlimeSetup(){
-        let slime = SlimeNode()
+        slime = SlimeNode()
         slime.position = CGPoint(x: frame.midX, y: sceneFloor.frame.maxY)
         slime.zPosition = SceneLayer.slime.rawValue
+        slime.setupConstrains(floor: sceneFloor.frame.maxY)
         addChild(slime)
-        slime.idleState()
+        slime.deathState()
+    }
+}
+//MARK: - Scene touches
+extension GameScene{
+    func touchDown(atPoint pos: CGPoint){
+        let distance = hypot(pos.x - slime.position.x, pos.y - slime.position.y)
+        let calculatedSpeed = TimeInterval(distance / slimeSpeed) / 255
+        if pos.x < slime.position.x { slime.moveToPosition(pos: pos, direction: "Left", speed: calculatedSpeed) }
+        else { slime.moveToPosition(pos: pos, direction: "Right", speed: calculatedSpeed) }
+    }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        for touch in touches { self.touchDown(atPoint: touch.location(in: self)) }
     }
 }
