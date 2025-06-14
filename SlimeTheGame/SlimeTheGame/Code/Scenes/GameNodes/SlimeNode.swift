@@ -26,8 +26,9 @@ final class SlimeNode: SKSpriteNode {
         self.fastWalkTexture = self.loadTextures(atlas: "Slime_Fast_Walk", prefix: "slime_fast_walk", startAt: 0, stopAt: 10)
         self.deathTexture    = self.loadTextures(atlas: "Slime_Death", prefix: "slime_death", startAt: 0, stopAt: 13)
         self.name            = "slime"
+        self.anchorPoint     = CGPoint(x: 0.5, y: 0.0)
         self.setScale(1)
-        self.anchorPoint = CGPoint(x: 0.5, y: 0.0)
+        setupPhysics()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -38,6 +39,14 @@ final class SlimeNode: SKSpriteNode {
         let lockToPlatform = SKConstraint.positionY(range)
         constraints        = [ lockToPlatform ]
     }
+    private func setupPhysics(){
+        self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
+        self.physicsBody?.isDynamic          = true
+        self.physicsBody?.categoryBitMask    = PhysicsCategory.slime
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.gem
+        self.physicsBody?.collisionBitMask   = PhysicsCategory.none
+    }
+    
     //MARK: - states
     func idleState(){
         guard let idleTexture = idleTexture else { preconditionFailure(AppConstants.errors.animationError) }

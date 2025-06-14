@@ -1,9 +1,3 @@
-//
-//  AppConstants.swift
-//  SlimeTheGame
-//
-//  Created by MIKHAIL ZHACHKO on 14.06.25.
-//
 
 import Foundation
 

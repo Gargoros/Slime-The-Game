@@ -1,0 +1,19 @@
+
+import Foundation
+import SpriteKit
+
+enum SceneLayer: CGFloat {
+    case background
+    case floor
+    case slime
+    case collectible
+}
+
+enum PhysicsCategory {
+    static let none: UInt32       = 0x1 << 0
+    static let slime: UInt32      = 0x1 << 1
+    static let gem: UInt32        = 0x1 << 2
+    static let foreground: UInt32 = 0x1 << 3
+    
+}
+

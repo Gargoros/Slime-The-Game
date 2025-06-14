@@ -1,9 +1,3 @@
-//
-//  CollectibleNode.swift
-//  SlimeTheGame
-//
-//  Created by MIKHAIL ZHACHKO on 9.06.25.
-//
 
 import Foundation
 import SpriteKit
@@ -59,6 +53,16 @@ final class CollectibleNode: SKSpriteNode {
     required init?(coder aDecoder: NSCoder) {
         fatalError(AppConstants.errors.nodeError)
     }
+    private func setupPhysics() {
+        guard self.size != .zero else { return }
+        self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
+        self.physicsBody?.isDynamic = true
+        self.physicsBody?.affectedByGravity = false
+        self.physicsBody?.categoryBitMask = PhysicsCategory.gem
+        self.physicsBody?.contactTestBitMask = PhysicsCategory.slime | PhysicsCategory.foreground
+        self.physicsBody?.collisionBitMask = PhysicsCategory.none
+    }
+
     //MARK: - states
     private func blueState(){
         guard let blueTexture = blueTexture else { preconditionFailure(AppConstants.errors.animationError) }
@@ -67,8 +71,8 @@ final class CollectibleNode: SKSpriteNode {
             speed: 0.1,
             name: CollectibleTypes.blue.rawValue,
             count: 0,
-            resize: true,
-            restore: true
+            resize: false,
+            restore: false
         )
     }
     private func pinkState(){
@@ -78,8 +82,8 @@ final class CollectibleNode: SKSpriteNode {
             speed: 0.1,
             name: CollectibleTypes.pink.rawValue,
             count: 0,
-            resize: true,
-            restore: true
+            resize: false,
+            restore: false
         )
     }
     private func greenState(){
@@ -89,8 +93,8 @@ final class CollectibleNode: SKSpriteNode {
             speed: 0.1,
             name: CollectibleTypes.green.rawValue,
             count: 0,
-            resize: true,
-            restore: true
+            resize: false,
+            restore: false
         )
     }
     private func purpleState(){
@@ -100,8 +104,8 @@ final class CollectibleNode: SKSpriteNode {
             speed: 0.1,
             name: CollectibleTypes.purple.rawValue,
             count: 0,
-            resize: true,
-            restore: true
+            resize: false,
+            restore: false
         )
     }
     private func redState(){
@@ -111,8 +115,8 @@ final class CollectibleNode: SKSpriteNode {
             speed: 0.1,
             name: CollectibleTypes.red.rawValue,
             count: 0,
-            resize: true,
-            restore: true
+            resize: false,
+            restore: false
         )
     }
     func runStateAnimation(_ gemType: CollectibleTypes){
@@ -127,11 +131,11 @@ final class CollectibleNode: SKSpriteNode {
     }
     func dropGem(dropSpeed: TimeInterval, floorLevel: CGFloat, gemType: CollectibleTypes){
         runStateAnimation(gemType)
+        setupPhysics()
         let pos = CGPoint(x: position.x, y: floorLevel)
-        let scaleX = SKAction.scaleX(to: 0.7, duration: 1.0)
-        let scaleY = SKAction.scaleY(to: 0.7, duration: 1.0)
+        let scaleX = SKAction.scaleX(to: 0.5, duration: 1.0)
+        let scaleY = SKAction.scaleY(to: 0.5, duration: 1.0)
         let scale = SKAction.group([scaleX, scaleY])
-        
         let appear = SKAction.fadeAlpha(to: 1.0, duration: 0.25)
         let moveAction = SKAction.move(to: pos, duration: dropSpeed)
         let actionSequence = SKAction.sequence([appear, scale, moveAction])
