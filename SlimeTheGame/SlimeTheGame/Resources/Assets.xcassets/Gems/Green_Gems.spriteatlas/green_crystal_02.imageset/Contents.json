@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "green_crystal_02.png",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
