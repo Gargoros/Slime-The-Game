@@ -26,7 +26,7 @@ final class SlimeNode: SKSpriteNode {
         self.fastWalkTexture = self.loadTextures(atlas: "Slime_Fast_Walk", prefix: "slime_fast_walk", startAt: 0, stopAt: 10)
         self.deathTexture    = self.loadTextures(atlas: "Slime_Death", prefix: "slime_death", startAt: 0, stopAt: 13)
         self.name            = "slime"
-        self.anchorPoint     = CGPoint(x: 0.5, y: 0.0)
+        self.anchorPoint     = CGPoint(x: 0.5, y: 0.5)
         self.setScale(1)
         setupPhysics()
     }
@@ -42,6 +42,7 @@ final class SlimeNode: SKSpriteNode {
     private func setupPhysics(){
         self.physicsBody = SKPhysicsBody(texture: self.texture!, size: self.size)
         self.physicsBody?.isDynamic          = true
+        self.physicsBody?.affectedByGravity  = false
         self.physicsBody?.categoryBitMask    = PhysicsCategory.slime
         self.physicsBody?.contactTestBitMask = PhysicsCategory.gem
         self.physicsBody?.collisionBitMask   = PhysicsCategory.none
@@ -109,7 +110,9 @@ final class SlimeNode: SKSpriteNode {
             case "Left": xScale = -abs(xScale)
             default: xScale = abs(xScale)
         }
-        let moveAction = SKAction.move(to: pos, duration: speed)
+        let newPos = CGPoint(x: pos.x, y: position.y)
+        let moveAction = SKAction.move(to: newPos, duration: speed)
         run(moveAction)
     }
+
 }

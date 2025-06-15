@@ -46,7 +46,7 @@ final class CollectibleNode: SKSpriteNode {
         self.purpleTexture = self.loadTextures(atlas: "Purple_Gems", prefix: "purple_crystal", startAt: 0, stopAt: 3)
         self.redTexture    = self.loadTextures(atlas: "Red_Gems", prefix: "red_crystal", startAt: 0, stopAt: 3)
         self.name          = "collect_\(collectibleType)"
-        self.anchorPoint   = CGPoint(x: 0.5, y: 1.0)
+        self.anchorPoint   = CGPoint(x: 0.5, y: 0.5)
         self.zPosition     = SceneLayer.collectible.rawValue
         setScale(0.7)
     }
@@ -54,8 +54,7 @@ final class CollectibleNode: SKSpriteNode {
         fatalError(AppConstants.errors.nodeError)
     }
     private func setupPhysics() {
-        guard self.size != .zero else { return }
-        self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
+        self.physicsBody = SKPhysicsBody(texture: texture!, size: texture!.size())
         self.physicsBody?.isDynamic = true
         self.physicsBody?.affectedByGravity = false
         self.physicsBody?.categoryBitMask = PhysicsCategory.gem
@@ -141,5 +140,13 @@ final class CollectibleNode: SKSpriteNode {
         let actionSequence = SKAction.sequence([appear, scale, moveAction])
         self.scale(to: CGSize(width: 0.25, height: 0.7))
         self.run(actionSequence, withKey: "drop")
+    }
+    func collected(){
+        let removeFromParent = SKAction.removeFromParent()
+        self.run(removeFromParent)
+    }
+    func missed(){
+        let removeFromParent = SKAction.removeFromParent()
+        self.run(removeFromParent)
     }
 }

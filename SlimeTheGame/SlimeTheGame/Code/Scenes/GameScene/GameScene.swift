@@ -5,7 +5,7 @@ import GameplayKit
 final class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     //MARK: - Properties
     internal var gameView: SlimeTheGameView?
-    private var sceneFloor: SKSpriteNode!
+    private var sceneFloor = FloorNode()
     private var slime                  = SlimeNode()
     private var movingSlime            = false
     private var lastPosition: CGPoint?
@@ -33,7 +33,6 @@ extension GameScene {
     }
     private func sceneBackground(){
         let backgroundImageNames   = ["slimeBG_01", "slimeBG_02", "slimeBG_03", "slimeBG_04"]
-        
         for imageName in backgroundImageNames {
             let background         = SKSpriteNode(imageNamed: imageName)
             background.anchorPoint = CGPoint(x: 0.0, y: 0.0)
@@ -44,25 +43,15 @@ extension GameScene {
         }
     }
     private func sceneFloorSetup(){
-        sceneFloor                                 = SKSpriteNode(imageNamed: "slimeFloor")
-        sceneFloor.anchorPoint                     = CGPoint(x: 0.0, y: 0.0)
-        sceneFloor.position                        = CGPoint(x: 0.0, y: 0.0)
-        sceneFloor.size = CGSize(width: frame.width, height: frame.height * 0.1)
-        sceneFloor.zPosition                       = SceneLayer.floor.rawValue
+        sceneFloor.position = CGPoint(x: frame.midX, y: frame.minY)
+        sceneFloor.size = CGSize(width: frame.width, height: frame.height * 0.13)
         addChild(sceneFloor)
-        sceneFloor.physicsBody = SKPhysicsBody(rectangleOf: sceneFloor.size)
-        sceneFloor.physicsBody?.affectedByGravity = false
-        sceneFloor.physicsBody?.isDynamic = false
-        sceneFloor.physicsBody?.restitution = 0.0
-        sceneFloor.physicsBody?.categoryBitMask = PhysicsCategory.foreground
-        sceneFloor.physicsBody?.contactTestBitMask = PhysicsCategory.gem
-        sceneFloor.physicsBody?.collisionBitMask = PhysicsCategory.none
     }
     private func sceneSlimeSetup(){
         slime = SlimeNode()
         slime.position = CGPoint(x: frame.midX, y: sceneFloor.frame.maxY)
         slime.zPosition = SceneLayer.slime.rawValue
-        slime.setupConstrains(floor: sceneFloor.frame.maxY)
+        slime.setupConstrains(floor: sceneFloor.frame.maxY + slime.frame.height * 0.4)
         addChild(slime)
         slime.idleState()
     }
@@ -133,15 +122,22 @@ extension GameScene{
         for touch in touches { self.touchUp(atPoint: touch.location(in: self)) }
     }
 }
-
+//MARK: - Scene contacts
 extension GameScene {
     func didBegin(_ contact: SKPhysicsContact) {
         let collision = contact.bodyA.categoryBitMask | contact.bodyB.categoryBitMask
         if collision == PhysicsCategory.slime | PhysicsCategory.gem {
-            print("Slime hit Gem")
+            let body = contact.bodyA.categoryBitMask == PhysicsCategory.gem ? contact.bodyA.node : contact.bodyB.node
+            if let sprite = body as? CollectibleNode {
+                sprite.collected()
+            }
         }
         if collision == PhysicsCategory.foreground | PhysicsCategory.gem {
-            print("Gem hit Floor")
+            let body = contact.bodyA.categoryBitMask == PhysicsCategory.gem ? contact.bodyA.node : contact.bodyB.node
+            if let sprite = body as? CollectibleNode {
+                sprite.missed()
+            }
         }
     }
+    
 }
