@@ -7,6 +7,7 @@ enum SceneLayer: CGFloat {
     case floor
     case slime
     case collectible
+    case ui
 }
 
 enum PhysicsCategory {

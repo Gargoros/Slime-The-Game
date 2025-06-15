@@ -10,9 +10,22 @@
 		8C5E0AAF2DECBAB700658E78 /* SlimeTheGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SlimeTheGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8C7D72242DFF5A7200154ABC /* Exceptions for "SlimeTheGame" folder in "SlimeTheGame" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8C5E0AAE2DECBAB700658E78 /* SlimeTheGame */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8C5E0AB12DECBAB700658E78 /* SlimeTheGame */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8C7D72242DFF5A7200154ABC /* Exceptions for "SlimeTheGame" folder in "SlimeTheGame" target */,
+			);
 			path = SlimeTheGame;
 			sourceTree = "<group>";
 		};
@@ -255,6 +268,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DD3P835Y9D;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SlimeTheGame/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Slime The Game";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -289,6 +303,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = DD3P835Y9D;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SlimeTheGame/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Slime The Game";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.games";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

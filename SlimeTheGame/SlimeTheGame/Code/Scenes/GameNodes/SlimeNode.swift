@@ -51,6 +51,8 @@ final class SlimeNode: SKSpriteNode {
     //MARK: - states
     func idleState(){
         guard let idleTexture = idleTexture else { preconditionFailure(AppConstants.errors.animationError) }
+        removeAction(forKey: SlimeAnimationType.death.rawValue)
+        removeAction(forKey: SlimeAnimationType.walk.rawValue)
         startAnimation(
             textures: idleTexture,
             speed: 0.1,
@@ -62,6 +64,7 @@ final class SlimeNode: SKSpriteNode {
     }
     func walkState(){
         guard let walkTexture = walkTexture else { preconditionFailure(AppConstants.errors.animationError) }
+        removeAction(forKey: SlimeAnimationType.idle.rawValue)
         startAnimation(
             textures: walkTexture,
             speed: 0.1,
@@ -73,6 +76,8 @@ final class SlimeNode: SKSpriteNode {
     }
     func jumpState(){
         guard let jumpTexture = jumpTexture else { preconditionFailure(AppConstants.errors.animationError) }
+        removeAction(forKey: SlimeAnimationType.idle.rawValue)
+        removeAction(forKey: SlimeAnimationType.walk.rawValue)
         startAnimation(
             textures: jumpTexture,
             speed: 0.1,
@@ -95,6 +100,8 @@ final class SlimeNode: SKSpriteNode {
     }
     func deathState(){
         guard let deathTexture = deathTexture else { preconditionFailure(AppConstants.errors.animationError) }
+        removeAction(forKey: SlimeAnimationType.walk.rawValue)
+        removeAction(forKey: SlimeAnimationType.idle.rawValue)
         startAnimation(
             textures: deathTexture,
             speed: 0.1,
