@@ -9,25 +9,19 @@ enum CollectibleTypes: String, CaseIterable {
     case pink
     case purple
     case red
-    
-    static var allPlayableCases: [CollectibleTypes] {
-        return [.blue, .green, .pink, .purple, .red]
-    }
-    
-    static var random: CollectibleTypes {
-        return allPlayableCases.randomElement() ?? .blue
-    }
+    static var allPlayableCases: [CollectibleTypes] { return [.blue, .green, .pink, .purple, .red] }
+    static var random: CollectibleTypes { return allPlayableCases.randomElement() ?? .blue }
 }
 
 final class CollectibleNode: SKSpriteNode {
+    //MARK: - Properties
     private var collectibleType = CollectibleTypes.none
-    
     private var blueTexture:   [SKTexture]?
     private var greenTexture:  [SKTexture]?
     private var pinkTexture:   [SKTexture]?
     private var purpleTexture: [SKTexture]?
     private var redTexture:    [SKTexture]?
-    
+    //MARK: - init
     init(collectibleType: CollectibleTypes) {
         var texture: SKTexture!
         self.collectibleType = collectibleType
@@ -50,18 +44,15 @@ final class CollectibleNode: SKSpriteNode {
         self.zPosition     = SceneLayer.collectible.rawValue
         setScale(0.7)
     }
-    required init?(coder aDecoder: NSCoder) {
-        fatalError(AppConstants.errors.nodeError)
-    }
+    required init?(coder aDecoder: NSCoder) { fatalError(AppConstants.errors.nodeError) }
     private func setupPhysics() {
-        self.physicsBody = SKPhysicsBody(texture: texture!, size: texture!.size())
-        self.physicsBody?.isDynamic = true
-        self.physicsBody?.affectedByGravity = false
-        self.physicsBody?.categoryBitMask = PhysicsCategory.gem
+        self.physicsBody                     = SKPhysicsBody(texture: texture!, size: texture!.size())
+        self.physicsBody?.isDynamic          = true
+        self.physicsBody?.affectedByGravity  = false
+        self.physicsBody?.categoryBitMask    = PhysicsCategory.gem
         self.physicsBody?.contactTestBitMask = PhysicsCategory.slime | PhysicsCategory.foreground
-        self.physicsBody?.collisionBitMask = PhysicsCategory.none
+        self.physicsBody?.collisionBitMask   = PhysicsCategory.none
     }
-
     //MARK: - states
     private func blueState(){
         guard let blueTexture = blueTexture else { preconditionFailure(AppConstants.errors.animationError) }
@@ -131,12 +122,12 @@ final class CollectibleNode: SKSpriteNode {
     func dropGem(dropSpeed: TimeInterval, floorLevel: CGFloat, gemType: CollectibleTypes){
         runStateAnimation(gemType)
         setupPhysics()
-        let pos = CGPoint(x: position.x, y: floorLevel)
-        let scaleX = SKAction.scaleX(to: 0.5, duration: 1.0)
-        let scaleY = SKAction.scaleY(to: 0.5, duration: 1.0)
-        let scale = SKAction.group([scaleX, scaleY])
-        let appear = SKAction.fadeAlpha(to: 1.0, duration: 0.25)
-        let moveAction = SKAction.move(to: pos, duration: dropSpeed)
+        let pos            = CGPoint(x: position.x, y: floorLevel)
+        let scaleX         = SKAction.scaleX(to: 0.5, duration: 1.0)
+        let scaleY         = SKAction.scaleY(to: 0.5, duration: 1.0)
+        let scale          = SKAction.group([scaleX, scaleY])
+        let appear         = SKAction.fadeAlpha(to: 1.0, duration: 0.25)
+        let moveAction     = SKAction.move(to: pos, duration: dropSpeed)
         let actionSequence = SKAction.sequence([appear, scale, moveAction])
         self.scale(to: CGSize(width: 0.25, height: 0.7))
         self.run(actionSequence, withKey: "drop")

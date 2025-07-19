@@ -5,10 +5,10 @@ import GameplayKit
 final class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     //MARK: - Properties
     internal var gameView: SlimeTheGameView?
-    private var sceneFloor = FloorNode()
+    private var sceneFloor             = FloorNode()
     private var slime                  = SlimeNode()
-    private var scoreLabel = SKLabelNode(fontNamed: "Nosifer-Regular")
-    private var levelLabel = SKLabelNode(fontNamed: "Nosifer-Regular")
+    private var scoreLabel             = SKLabelNode(fontNamed: "Nosifer-Regular")
+    private var levelLabel             = SKLabelNode(fontNamed: "Nosifer-Regular")
     private var movingSlime            = false
     private var lastPosition: CGPoint?
     private var slimeSpeed: CGFloat    = 1.5
@@ -54,25 +54,25 @@ extension GameScene {
     }
     private func sceneFloorSetup(){
         sceneFloor.position = CGPoint(x: frame.midX, y: frame.minY)
-        sceneFloor.size = CGSize(width: frame.width, height: frame.height * 0.13)
+        sceneFloor.size     = CGSize(width: frame.width, height: frame.height * 0.13)
         addChild(sceneFloor)
     }
     private func sceneSlimeSetup(){
-        slime = SlimeNode()
-        slime.position = CGPoint(x: frame.midX, y: sceneFloor.frame.maxY + slime.frame.height * 0.4)
+        slime           = SlimeNode()
+        slime.position  = CGPoint(x: frame.midX, y: sceneFloor.frame.maxY + slime.frame.height * 0.4)
         slime.zPosition = SceneLayer.slime.rawValue
         slime.setupConstrains(floor: sceneFloor.frame.maxY + slime.frame.height * 0.4)
         addChild(slime)
         slime.idleState()
     }
     private func spawnGem(){
-        let gemType = CollectibleTypes.random
+        let gemType   = CollectibleTypes.random
         print("\(gemType.rawValue)")
-        let gem = CollectibleNode(collectibleType: gemType)
-        let margin = gem.size.width * 2
+        let gem       = CollectibleNode(collectibleType: gemType)
+        let margin    = gem.size.width * 2
         let dropRange = SKRange(lowerLimit: frame.minX + margin, upperLimit: frame.maxX - margin)
-        let randomX = CGFloat.random(in: dropRange.lowerLimit...dropRange.upperLimit)
-        gem.position = CGPoint(x: randomX, y: frame.maxY - margin)
+        let randomX   = CGFloat.random(in: dropRange.lowerLimit...dropRange.upperLimit)
+        gem.position  = CGPoint(x: randomX, y: frame.maxY - margin)
         addChild(gem)
         gem.dropGem(dropSpeed: TimeInterval(1.0), floorLevel: slime.frame.minY, gemType: gemType)
     }
@@ -81,8 +81,8 @@ extension GameScene {
         gameInProgress = true
         
         if gameInProgress == false {
-            gameScore = 0
-            level     = 1
+            gameScore  = 0
+            level      = 1
         }
         switch level {
             case 1...5: numberOfDrop = level * 10
@@ -93,47 +93,47 @@ extension GameScene {
             case 10: numberOfDrop    = 200
             default: numberOfDrop    = 100
         }
-        dropsExpected = numberOfDrop
-        dropsCollected = 0
-        dropSpeed = 1 / (CGFloat(level) + (CGFloat(level) / CGFloat(numberOfDrop)))
+        dropsExpected    = numberOfDrop
+        dropsCollected   = 0
+        dropSpeed        = 1 / (CGFloat(level) + (CGFloat(level) / CGFloat(numberOfDrop)))
         if dropSpeed < minDropSpeed { dropSpeed = minDropSpeed}
         else if dropSpeed > maxDropSpeed { dropSpeed = maxDropSpeed }
-        let wait = SKAction.wait(forDuration: TimeInterval(dropSpeed))
-        let spawn = SKAction.run { [unowned self] in self.spawnGem() }
-        let sequence = SKAction.sequence([wait, spawn])
+        let wait         = SKAction.wait(forDuration: TimeInterval(dropSpeed))
+        let spawn        = SKAction.run { [unowned self] in self.spawnGem() }
+        let sequence     = SKAction.sequence([wait, spawn])
         let repeatAction = SKAction.repeat(sequence, count: numberOfDrop)
         run(repeatAction, withKey: "gem")
     }
     private func sceneLabelsSetup(){
         //MARK: - Score label
-        scoreLabel.name = "score"
-        scoreLabel.fontColor = .green
-        scoreLabel.fontSize = frame.height * 0.05
+        scoreLabel.name                    = "score"
+        scoreLabel.fontColor               = .green
+        scoreLabel.fontSize                = frame.height * 0.05
         scoreLabel.horizontalAlignmentMode = .right
-        scoreLabel.verticalAlignmentMode = .center
-        scoreLabel.zPosition = SceneLayer.ui.rawValue
-        scoreLabel.position = CGPoint(x: frame.maxX - frame.width * 0.05, y: frame.maxY - frame.height * 0.1)
-        scoreLabel.text = "Score: \(gameScore)"
+        scoreLabel.verticalAlignmentMode   = .center
+        scoreLabel.zPosition               = SceneLayer.ui.rawValue
+        scoreLabel.position                = CGPoint(x: frame.maxX - frame.width * 0.05, y: frame.maxY - frame.height * 0.1)
+        scoreLabel.text                    = "Score: \(gameScore)"
         addChild(scoreLabel)
         //MARK: - Level label
-        levelLabel.name = "level"
-        levelLabel.fontColor = .green
-        levelLabel.fontSize = frame.height * 0.05
+        levelLabel.name                    = "level"
+        levelLabel.fontColor               = .green
+        levelLabel.fontSize                = frame.height * 0.05
         levelLabel.horizontalAlignmentMode = .left
-        levelLabel.verticalAlignmentMode = .center
-        levelLabel.zPosition = SceneLayer.ui.rawValue
-        levelLabel.position = CGPoint(x: frame.minX + frame.width * 0.05, y: frame.maxY - frame.height * 0.1)
-        levelLabel.text = "Level: \(level)"
+        levelLabel.verticalAlignmentMode   = .center
+        levelLabel.zPosition               = SceneLayer.ui.rawValue
+        levelLabel.position                = CGPoint(x: frame.minX + frame.width * 0.05, y: frame.maxY - frame.height * 0.1)
+        levelLabel.text                    = "Level: \(level)"
         addChild(levelLabel)
     }
     private func showMessage(_ message: String){
-        let messageLabel = SKLabelNode()
-        messageLabel.name = "message"
-        messageLabel.position = CGPoint(x: frame.midX, y: slime.position.y + frame.height * 0.2)
-        messageLabel.zPosition = SceneLayer.ui.rawValue
+        let messageLabel           = SKLabelNode()
+        messageLabel.name          = "message"
+        messageLabel.position      = CGPoint(x: frame.midX, y: slime.position.y + frame.height * 0.2)
+        messageLabel.zPosition     = SceneLayer.ui.rawValue
         messageLabel.numberOfLines = 2
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.alignment = .center
+        let paragraph              = NSMutableParagraphStyle()
+        paragraph.alignment        = .center
         let attributes: [NSAttributedString.Key : Any] = [
             .foregroundColor: SKColor(red: 251.0/255.0, green: 155.0/255.0, blue: 24.0/255.0, alpha: 1.0),
             .backgroundColor: UIColor.clear,
@@ -163,8 +163,8 @@ extension GameScene {
         }
     }
     private func resetSlimePosition(){
-        let resetPoint = CGPoint(x: frame.midX, y: slime.position.y)
-        let distance = hypot(resetPoint.x - slime.position.x, 0)
+        let resetPoint      = CGPoint(x: frame.midX, y: slime.position.y)
+        let distance        = hypot(resetPoint.x - slime.position.x, 0)
         let calculatedSpeed = TimeInterval(distance / (slimeSpeed * 2) / 255)
         if slime.position.x > frame.midX { slime.moveToPosition(pos: resetPoint, direction: "Left", speed: calculatedSpeed) }
         else { slime.moveToPosition(pos: resetPoint, direction: "Right", speed: calculatedSpeed) }
@@ -172,10 +172,10 @@ extension GameScene {
     private func popRemainingDrops(){
         var i = 0
         enumerateChildNodes(withName: "//collect_*") { node, stop in
-            let initialWait = SKAction.wait(forDuration: 1.0)
-            let wait = SKAction.wait(forDuration: TimeInterval(0.15 * CGFloat(i)))
+            let initialWait      = SKAction.wait(forDuration: 1.0)
+            let wait             = SKAction.wait(forDuration: TimeInterval(0.15 * CGFloat(i)))
             let removeFromParent = SKAction.removeFromParent()
-            let actionSequence = SKAction.sequence([initialWait, wait, removeFromParent])
+            let actionSequence   = SKAction.sequence([initialWait, wait, removeFromParent])
             node.run(actionSequence)
             i += 1
         }

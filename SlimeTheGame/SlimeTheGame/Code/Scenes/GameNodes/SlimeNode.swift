@@ -11,14 +11,15 @@ enum SlimeAnimationType: String {
 }
 
 final class SlimeNode: SKSpriteNode {
+    //MARK: - Properties
     private var idleTexture:     [SKTexture]?
     private var walkTexture:     [SKTexture]?
     private var jumpTexture:     [SKTexture]?
     private var fastWalkTexture: [SKTexture]?
     private var deathTexture:    [SKTexture]?
-    
+    //MARK: - Init
     init() {
-        let texture = SKTexture(imageNamed: "slime_idle_01")
+        let texture          = SKTexture(imageNamed: "slime_idle_01")
         super.init(texture: texture, color: .clear, size: texture.size())
         self.idleTexture     = self.loadTextures(atlas: "Slime_Idle", prefix: "slime_idle", startAt: 0, stopAt: 6)
         self.walkTexture     = self.loadTextures(atlas: "Slime_Walk", prefix: "slime_walk", startAt: 0, stopAt: 10)
@@ -30,10 +31,7 @@ final class SlimeNode: SKSpriteNode {
         self.setScale(1)
         setupPhysics()
     }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError(AppConstants.errors.nodeError)
-    }
+    required init?(coder aDecoder: NSCoder) { fatalError(AppConstants.errors.nodeError) }
     func setupConstrains(floor: CGFloat){
         let range          = SKRange(lowerLimit: floor, upperLimit: floor)
         let lockToPlatform = SKConstraint.positionY(range)
@@ -82,7 +80,7 @@ final class SlimeNode: SKSpriteNode {
             textures: jumpTexture,
             speed: 0.1,
             name: SlimeAnimationType.jump.rawValue,
-            count: 0,
+            count: 1,
             resize: true,
             restore: true
         )
@@ -93,7 +91,7 @@ final class SlimeNode: SKSpriteNode {
             textures: fastWalkTexture,
             speed: 0.1,
             name: SlimeAnimationType.fastWalk.rawValue,
-            count: 0,
+            count: 1,
             resize: true,
             restore: true
         )
@@ -106,7 +104,7 @@ final class SlimeNode: SKSpriteNode {
             textures: deathTexture,
             speed: 0.1,
             name: SlimeAnimationType.death.rawValue,
-            count: 0,
+            count: 1,
             resize: true,
             restore: true
         )
@@ -115,10 +113,10 @@ final class SlimeNode: SKSpriteNode {
     func moveToPosition(pos: CGPoint, direction: String, speed: TimeInterval){
         switch direction {
             case "Left": xScale = -abs(xScale)
-            default: xScale = abs(xScale)
+            default: xScale     = abs(xScale)
         }
-        let newPos = CGPoint(x: pos.x, y: position.y)
-        let moveAction = SKAction.move(to: newPos, duration: speed)
+        let newPos              = CGPoint(x: pos.x, y: position.y)
+        let moveAction          = SKAction.move(to: newPos, duration: speed)
         run(moveAction)
     }
 
