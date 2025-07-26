@@ -1,9 +1,3 @@
-//
-//  SlimeTheGameApp.swift
-//  SlimeTheGame
-//
-//  Created by MIKHAIL ZHACHKO on 14.06.25.  SlimeTheGameMainView
-//
 
 import SwiftUI
 
@@ -16,8 +10,7 @@ struct SlimeTheGameApp: App {
     var body: some Scene {
         WindowGroup {
             SlimeTheGameView(isPresented: .constant(true))
-                .ignoresSafeArea()
+                .mainModifier()
         }
-        
     }
 }

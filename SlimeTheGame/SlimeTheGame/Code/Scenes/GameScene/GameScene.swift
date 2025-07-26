@@ -5,30 +5,28 @@ import GameplayKit
 final class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     //MARK: - Properties
     internal var gameView: SlimeTheGameView?
-    private var sceneFloor = FloorNode()
+    private var sceneFloor             = FloorNode()
     private var slime                  = SlimeNode()
-    private var scoreLabel = SKLabelNode(fontNamed: "Nosifer-Regular")
-    private var levelLabel = SKLabelNode(fontNamed: "Nosifer-Regular")
+    private var scoreLabel             = SKLabelNode(fontNamed: AppConstants.fonts.regular)
+    private var levelLabel             = SKLabelNode(fontNamed: AppConstants.fonts.regular)
     private var movingSlime            = false
     private var lastPosition: CGPoint?
     private var slimeSpeed: CGFloat    = 1.5
-    private var level: Int             = 1 { didSet { levelLabel.text = "Level: \(level)" } }
     private var numberOfDrop: Int      = 10
     private var dropsExpected: Int     = 10
     private var dropsCollected: Int    = 0
     private var dropSpeed: CGFloat     = 1.0
     private var minDropSpeed: CGFloat  = 0.12
     private var maxDropSpeed: CGFloat  = 1.0
-    private var gameScore: Int         = 0 { didSet { scoreLabel.text = "Score: \(gameScore)" } }
+    private var level: Int             = 1 { didSet { levelLabel.text = AppConstants.gameText.level + "\(level)" } }
+    private var gameScore: Int         = 0 { didSet { scoreLabel.text = AppConstants.gameText.score + "\(gameScore)" } }
     private var gameInProgress         = false
     //MARK: - Init
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         sceneSetup()
     }
-    override func update(_ currentTime: TimeInterval) {
-        checkForRemainingDrops()
-    }
+    override func update(_ currentTime: TimeInterval) { checkForRemainingDrops() }
 }
 
 //MARK: - Scene setups
@@ -39,7 +37,7 @@ extension GameScene {
         sceneFloorSetup()
         sceneSlimeSetup()
         sceneLabelsSetup()
-        showMessage("Tap to start game")
+        showMessage(AppConstants.gameText.tapText)
     }
     private func sceneBackground(){
         let backgroundImageNames   = ["slimeBG_01", "slimeBG_02", "slimeBG_03", "slimeBG_04"]
@@ -106,29 +104,29 @@ extension GameScene {
     }
     private func sceneLabelsSetup(){
         //MARK: - Score label
-        scoreLabel.name = "score"
+        scoreLabel.name = AppConstants.dataKeys.score.rawValue
         scoreLabel.fontColor = .green
         scoreLabel.fontSize = frame.height * 0.05
         scoreLabel.horizontalAlignmentMode = .right
         scoreLabel.verticalAlignmentMode = .center
         scoreLabel.zPosition = SceneLayer.ui.rawValue
         scoreLabel.position = CGPoint(x: frame.maxX - frame.width * 0.05, y: frame.maxY - frame.height * 0.1)
-        scoreLabel.text = "Score: \(gameScore)"
+        scoreLabel.text = AppConstants.gameText.score + "\(gameScore)"
         addChild(scoreLabel)
         //MARK: - Level label
-        levelLabel.name = "level"
+        levelLabel.name = AppConstants.dataKeys.level.rawValue
         levelLabel.fontColor = .green
         levelLabel.fontSize = frame.height * 0.05
         levelLabel.horizontalAlignmentMode = .left
         levelLabel.verticalAlignmentMode = .center
         levelLabel.zPosition = SceneLayer.ui.rawValue
         levelLabel.position = CGPoint(x: frame.minX + frame.width * 0.05, y: frame.maxY - frame.height * 0.1)
-        levelLabel.text = "Level: \(level)"
+        levelLabel.text = AppConstants.gameText.level + "\(level)"
         addChild(levelLabel)
     }
     private func showMessage(_ message: String){
         let messageLabel = SKLabelNode()
-        messageLabel.name = "message"
+        messageLabel.name = AppConstants.dataKeys.message.rawValue
         messageLabel.position = CGPoint(x: frame.midX, y: slime.position.y + frame.height * 0.2)
         messageLabel.zPosition = SceneLayer.ui.rawValue
         messageLabel.numberOfLines = 2
@@ -137,7 +135,7 @@ extension GameScene {
         let attributes: [NSAttributedString.Key : Any] = [
             .foregroundColor: SKColor(red: 251.0/255.0, green: 155.0/255.0, blue: 24.0/255.0, alpha: 1.0),
             .backgroundColor: UIColor.clear,
-            .font: UIFont(name: "Nosifer-Regular", size: frame.height * 0.07)!,
+            .font: UIFont(name: AppConstants.fonts.regular, size: frame.height * 0.07)!,
             .paragraphStyle: paragraph
         ]
         messageLabel.attributedText = NSAttributedString(string: message, attributes: attributes)
@@ -153,12 +151,12 @@ extension GameScene {
 //MARK: - Scene logic and methods
 extension GameScene {
     private func gameOver (){
-        showMessage("Game Over\nTap to try again")
+        showMessage(AppConstants.gameText.gameOver)
         gameInProgress = false
         slime.deathState()
-        removeAction(forKey: "slime")
+        removeAction(forKey: AppConstants.dataKeys.slime.rawValue)
         enumerateChildNodes(withName: "//collect_*") { node, stop in
-            node.removeAction(forKey: "drop")
+            node.removeAction(forKey: AppConstants.dataKeys.drop.rawValue)
             node.physicsBody = nil
         }
     }
@@ -166,8 +164,8 @@ extension GameScene {
         let resetPoint = CGPoint(x: frame.midX, y: slime.position.y)
         let distance = hypot(resetPoint.x - slime.position.x, 0)
         let calculatedSpeed = TimeInterval(distance / (slimeSpeed * 2) / 255)
-        if slime.position.x > frame.midX { slime.moveToPosition(pos: resetPoint, direction: "Left", speed: calculatedSpeed) }
-        else { slime.moveToPosition(pos: resetPoint, direction: "Right", speed: calculatedSpeed) }
+        if slime.position.x > frame.midX { slime.moveToPosition(pos: resetPoint, direction: AppConstants.dataKeys.left.rawValue, speed: calculatedSpeed) }
+        else { slime.moveToPosition(pos: resetPoint, direction: AppConstants.dataKeys.right.rawValue, speed: calculatedSpeed) }
     }
     private func popRemainingDrops(){
         var i = 0
@@ -181,12 +179,10 @@ extension GameScene {
         }
     }
     private func checkForRemainingDrops(){
-        if dropsCollected == dropsExpected {
-            nextLevel()
-        }
+        if dropsCollected == dropsExpected { nextLevel() }
     }
     private func nextLevel(){
-        showMessage("Get Ready!")
+        showMessage(AppConstants.gameText.getReady)
         let wait = SKAction.wait(forDuration: 2.25)
         run(wait, completion: {
             [unowned self] in self.level += 1
@@ -199,15 +195,15 @@ extension GameScene{
     
     private func touchDown(atPoint pos: CGPoint){
         let touchedNode = atPoint(pos)
-        if touchedNode.name == "slime" { movingSlime = true }
+        if touchedNode.name == AppConstants.dataKeys.slime.rawValue { movingSlime = true }
         let distance = hypot(pos.x - slime.position.x, pos.y - slime.position.y)
         let calculatedSpeed = TimeInterval(distance / slimeSpeed) / 255
         if pos.x < slime.position.x {
-            slime.moveToPosition(pos: pos, direction: "Left", speed: calculatedSpeed)
+            slime.moveToPosition(pos: pos, direction: AppConstants.dataKeys.left.rawValue, speed: calculatedSpeed)
             slime.walkState()
         }
         else {
-            slime.moveToPosition(pos: pos, direction: "Right", speed: calculatedSpeed)
+            slime.moveToPosition(pos: pos, direction: AppConstants.dataKeys.right.rawValue, speed: calculatedSpeed)
             slime.walkState()
         }
     }

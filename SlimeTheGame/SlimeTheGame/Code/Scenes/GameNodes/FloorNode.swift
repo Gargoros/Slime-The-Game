@@ -11,9 +11,7 @@ final class FloorNode: SKSpriteNode {
     }
     required init?(coder aDecoder: NSCoder) { fatalError(AppConstants.errors.nodeError) }
     
-    private func floorSetup(){
-        self.zPosition = SceneLayer.floor.rawValue
-    }
+    private func floorSetup(){ self.zPosition = SceneLayer.floor.rawValue }
     private func floorPhysicsBodySetup(){
         self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
         self.physicsBody?.affectedByGravity = false
