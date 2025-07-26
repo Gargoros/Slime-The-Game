@@ -3,12 +3,7 @@ import Foundation
 import SpriteKit
 
 enum CollectibleTypes: String, CaseIterable {
-    case none
-    case blue
-    case green
-    case pink
-    case purple
-    case red
+    case none, blue, green, pink, purple, red
     static var allPlayableCases: [CollectibleTypes] { return [.blue, .green, .pink, .purple, .red] }
     static var random: CollectibleTypes { return allPlayableCases.randomElement() ?? .blue }
 }
@@ -56,58 +51,23 @@ final class CollectibleNode: SKSpriteNode {
     //MARK: - states
     private func blueState(){
         guard let blueTexture = blueTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        startAnimation(
-            textures: blueTexture,
-            speed: 0.1,
-            name: CollectibleTypes.blue.rawValue,
-            count: 0,
-            resize: false,
-            restore: false
-        )
+        startAnimation(textures: blueTexture, speed: 0.1, name: CollectibleTypes.blue.rawValue, count: 0, resize: false, restore: false)
     }
     private func pinkState(){
         guard let pinkTexture = pinkTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        startAnimation(
-            textures: pinkTexture,
-            speed: 0.1,
-            name: CollectibleTypes.pink.rawValue,
-            count: 0,
-            resize: false,
-            restore: false
-        )
+        startAnimation(textures: pinkTexture, speed: 0.1, name: CollectibleTypes.pink.rawValue, count: 0, resize: false, restore: false)
     }
     private func greenState(){
         guard let greenTexture = greenTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        startAnimation(
-            textures: greenTexture,
-            speed: 0.1,
-            name: CollectibleTypes.green.rawValue,
-            count: 0,
-            resize: false,
-            restore: false
-        )
+        startAnimation(textures: greenTexture, speed: 0.1, name: CollectibleTypes.green.rawValue, count: 0, resize: false, restore: false)
     }
     private func purpleState(){
         guard let purpleTexture = purpleTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        startAnimation(
-            textures: purpleTexture,
-            speed: 0.1,
-            name: CollectibleTypes.purple.rawValue,
-            count: 0,
-            resize: false,
-            restore: false
-        )
+        startAnimation(textures: purpleTexture, speed: 0.1, name: CollectibleTypes.purple.rawValue, count: 0, resize: false, restore: false)
     }
     private func redState(){
         guard let redTexture = redTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        startAnimation(
-            textures: redTexture,
-            speed: 0.1,
-            name: CollectibleTypes.red.rawValue,
-            count: 0,
-            resize: false,
-            restore: false
-        )
+        startAnimation(textures: redTexture, speed: 0.1, name: CollectibleTypes.red.rawValue, count: 0, resize: false, restore: false)
     }
     func runStateAnimation(_ gemType: CollectibleTypes){
         switch gemType {

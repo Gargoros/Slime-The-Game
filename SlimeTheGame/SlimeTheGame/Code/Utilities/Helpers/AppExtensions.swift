@@ -1,5 +1,5 @@
 
-import Foundation
+import SwiftUI
 import SpriteKit
 
 extension SKSpriteNode {
@@ -27,5 +27,11 @@ extension SKSpriteNode {
             }
         }
         
+    }
+}
+
+extension View {
+    func mainModifier() -> some View {
+        self.modifier(AppMainViewModifier())
     }
 }

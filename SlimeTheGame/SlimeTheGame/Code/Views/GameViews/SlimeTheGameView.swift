@@ -20,7 +20,7 @@ struct SlimeTheGameView: View {
             .onAppear { setupGameScene(geometry.size) }
             .position(x: geometry.size.width * 0.5, y: geometry.size.height * 0.5)
         }
-        .ignoresSafeArea()
+        .mainModifier()
     }
     private func setupGameScene(_ size: CGSize){
         gameScene.gameView = self
