@@ -7,14 +7,15 @@ enum SlimeAnimationType: String {
 }
 
 final class SlimeNode: SKSpriteNode {
+    //MARK: - Properties
     private var idleTexture:     [SKTexture]?
     private var walkTexture:     [SKTexture]?
     private var jumpTexture:     [SKTexture]?
     private var fastWalkTexture: [SKTexture]?
     private var deathTexture:    [SKTexture]?
-    
+    //MARK: - Init
     init() {
-        let texture = SKTexture(imageNamed: "slime_idle_01")
+        let texture          = SKTexture(imageNamed: "slime_idle_01")
         super.init(texture: texture, color: .clear, size: texture.size())
         self.idleTexture     = self.loadTextures(atlas: "Slime_Idle", prefix: "slime_idle", startAt: 0, stopAt: 6)
         self.walkTexture     = self.loadTextures(atlas: "Slime_Walk", prefix: "slime_walk", startAt: 0, stopAt: 10)
@@ -73,8 +74,8 @@ final class SlimeNode: SKSpriteNode {
             case AppConstants.dataKeys.left.rawValue: xScale = -abs(xScale)
             default: xScale = abs(xScale)
         }
-        let newPos = CGPoint(x: pos.x, y: position.y)
-        let moveAction = SKAction.move(to: newPos, duration: speed)
+        let newPos              = CGPoint(x: pos.x, y: position.y)
+        let moveAction          = SKAction.move(to: newPos, duration: speed)
         run(moveAction)
     }
 
