@@ -4,6 +4,7 @@ import Foundation
 enum SceneLayer: CGFloat {
     case background
     case floorBG
+    case emptyfloor
     case floor
     case slime
     case collectible
