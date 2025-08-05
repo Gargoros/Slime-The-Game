@@ -65,7 +65,7 @@ extension GameScene {
         sceneSlimeSetup()
         sceneLabelsSetup()
         showMessage(AppConstants.gameText.tapText)
-        playBackgroundSound()
+//        playBackgroundSound()
     }
     private func sceneBackground(){
         let backgroundImageNames   = AppConstants.backgroundImageNames
@@ -82,7 +82,7 @@ extension GameScene {
         floorBG.name      = AppConstants.dataKeys.floorBG.rawValue
         floorBG.zPosition = SceneLayer.floorBG.rawValue
         floorBG.position  =  CGPoint(x: frame.minX, y: frame.minY - frame.height * 0.03)
-        floorBG.setupScrollingView(imageName: AppConstants.imageNames.floorBG, layer: SceneLayer.floorBG, blocks: 3, speed: 30.0)
+        floorBG.setupScrollingView(imageName: AppConstants.imageNames.floorBG, layer: SceneLayer.floorBG, blocks: 3, speed: 30.0, emitterNamed: AppConstants.particleNames.floorEffect)
         addChild(floorBG)
     }
     private func sceneFloorSetup(){

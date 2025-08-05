@@ -38,7 +38,7 @@ extension SKSpriteNode {
 }
 
 extension SKNode {
-    func setupScrollingView(imageName name: String, layer: SceneLayer, blocks: Int, speed: TimeInterval){
+    func setupScrollingView(imageName name: String, layer: SceneLayer, blocks: Int, speed: TimeInterval, emitterNamed: String?){
         for i in 0..<blocks {
             let spriteNode = SKSpriteNode(imageNamed: name)
             spriteNode.anchorPoint = CGPoint.zero
@@ -47,6 +47,10 @@ extension SKNode {
             spriteNode.name = name
             spriteNode.endlessScroll(speed: speed)
             addChild(spriteNode)
+            if let emitterNamed = emitterNamed, let particles = SKEmitterNode(fileNamed: emitterNamed) {
+                particles.name = AppConstants.dataKeys.particles.rawValue
+                spriteNode.addChild(particles)
+            }
         }
     }
 }

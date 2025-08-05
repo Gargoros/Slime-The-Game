@@ -65,9 +65,12 @@ enum AppConstants {
         static let allGameName    = "//collect_*"
         static let message        = "//message"
     }
-    
+    enum particleNames {
+        static let floorEffect    = "SlimeFloorSpark"
+    }
     enum dataKeys: String {
         case floorBG
+        case particles
         case score
         case level
         case message
