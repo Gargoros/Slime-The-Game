@@ -16,25 +16,27 @@ final class CollectibleNode: SKSpriteNode {
     private var pinkTexture:   [SKTexture]?
     private var purpleTexture: [SKTexture]?
     private var redTexture:    [SKTexture]?
+    private let collectSound  = SKAction.playSoundFileNamed(AppConstants.soundNames.collectSound, waitForCompletion: false)
+    private let missSound     = SKAction.playSoundFileNamed(AppConstants.soundNames.missSound, waitForCompletion: false)
     //MARK: - init
     init(collectibleType: CollectibleTypes) {
         var texture: SKTexture!
         self.collectibleType = collectibleType
         switch collectibleType {
             case .none: break
-            case .blue: texture   = SKTexture(imageNamed: "blue_crystal_01")
-            case .green: texture  = SKTexture(imageNamed: "green_crystal_01")
-            case .pink: texture   = SKTexture(imageNamed: "pink_crystal_01")
-            case .purple: texture = SKTexture(imageNamed: "purple_crystal_01")
-            case .red: texture    = SKTexture(imageNamed: "red_crystal_01")
+            case .blue: texture   = SKTexture(imageNamed: AppConstants.imageNames.blueCrystal)
+            case .green: texture  = SKTexture(imageNamed: AppConstants.imageNames.greenCrystal)
+            case .pink: texture   = SKTexture(imageNamed: AppConstants.imageNames.pinkCrystal)
+            case .purple: texture = SKTexture(imageNamed: AppConstants.imageNames.purpleCrystal)
+            case .red: texture    = SKTexture(imageNamed: AppConstants.imageNames.redCrystal)
         }
         super.init(texture: texture, color: .clear, size: texture.size())
-        self.blueTexture   = self.loadTextures(atlas: "Blue_Gems", prefix: "blue_crystal", startAt: 0, stopAt: 3)
-        self.greenTexture  = self.loadTextures(atlas: "Green_Gems", prefix: "green_crystal", startAt: 0, stopAt: 3)
-        self.pinkTexture   = self.loadTextures(atlas: "Pink_Gems", prefix: "pink_crystal", startAt: 0, stopAt: 3)
-        self.purpleTexture = self.loadTextures(atlas: "Purple_Gems", prefix: "purple_crystal", startAt: 0, stopAt: 3)
-        self.redTexture    = self.loadTextures(atlas: "Red_Gems", prefix: "red_crystal", startAt: 0, stopAt: 3)
-        self.name          = "collect_\(collectibleType)"
+        self.blueTexture   = self.loadTextures(atlas: AppConstants.atlasNames.blueAtlas, prefix: AppConstants.atlasPrefixes.bluePrefix , startAt: 0, stopAt: 3)
+        self.greenTexture  = self.loadTextures(atlas: AppConstants.atlasNames.greenAtlas, prefix: AppConstants.atlasPrefixes.greenPrefix, startAt: 0, stopAt: 3)
+        self.pinkTexture   = self.loadTextures(atlas: AppConstants.atlasNames.pinkAtlas, prefix: AppConstants.atlasPrefixes.pinkPrefix, startAt: 0, stopAt: 3)
+        self.purpleTexture = self.loadTextures(atlas: AppConstants.atlasNames.purpleAtlas, prefix: AppConstants.atlasPrefixes.purplePrefix, startAt: 0, stopAt: 3)
+        self.redTexture    = self.loadTextures(atlas: AppConstants.atlasNames.redAtlas, prefix: AppConstants.atlasPrefixes.redPrefix, startAt: 0, stopAt: 3)
+        self.name          = AppConstants.nodeNames.gemName + "\(collectibleType)"
         self.anchorPoint   = CGPoint(x: 0.5, y: 0.5)
         self.zPosition     = SceneLayer.collectible.rawValue
         setScale(0.7)
@@ -90,14 +92,17 @@ final class CollectibleNode: SKSpriteNode {
         let moveAction     = SKAction.move(to: pos, duration: dropSpeed)
         let actionSequence = SKAction.sequence([appear, scale, moveAction])
         self.scale(to: CGSize(width: 0.25, height: 0.7))
-        self.run(actionSequence, withKey: "drop")
+        self.run(actionSequence, withKey: AppConstants.dataKeys.drop.rawValue)
     }
     func collected(){
         let removeFromParent = SKAction.removeFromParent()
-        self.run(removeFromParent)
+        let actionGroup = SKAction.group([collectSound, removeFromParent])
+        self.run(actionGroup)
+
     }
     func missed(){
         let removeFromParent = SKAction.removeFromParent()
-        self.run(removeFromParent)
+        let actionGroup = SKAction.group([missSound, removeFromParent])
+        self.run(actionGroup)
     }
 }

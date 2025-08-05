@@ -1,9 +1,9 @@
 
 import Foundation
-import SpriteKit
 
 enum SceneLayer: CGFloat {
     case background
+    case floorBG
     case floor
     case slime
     case collectible
