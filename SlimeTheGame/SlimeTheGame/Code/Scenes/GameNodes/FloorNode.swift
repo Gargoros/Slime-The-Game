@@ -3,7 +3,7 @@ import SpriteKit
 
 final class FloorNode: SKSpriteNode {
     //MARK: - Properties
-    private let floorTexture = SKTexture(imageNamed: "slimeFloor")
+    private let floorTexture = SKTexture(imageNamed: AppConstants.imageNames.floorImage)
     //MARK: - Init
     init() {
         super.init(texture: floorTexture, color: .clear, size: floorTexture.size())
