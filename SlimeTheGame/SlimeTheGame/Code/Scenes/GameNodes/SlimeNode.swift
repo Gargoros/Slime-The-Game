@@ -3,25 +3,21 @@ import Foundation
 import SpriteKit
 
 enum SlimeAnimationType: String {
-    case idle, walk, fastWalk, jump, death
+    case idle, walk, death
 }
 
 final class SlimeNode: SKSpriteNode {
     //MARK: - Properties
     private var idleTexture:     [SKTexture]?
     private var walkTexture:     [SKTexture]?
-    private var jumpTexture:     [SKTexture]?
-    private var fastWalkTexture: [SKTexture]?
     private var deathTexture:    [SKTexture]?
     //MARK: - Init
     init() {
-        let texture          = SKTexture(imageNamed: "slime_idle_01")
+        let texture          = SKTexture(imageNamed: AppConstants.imageNames.startSlime)
         super.init(texture: texture, color: .clear, size: texture.size())
-        self.idleTexture     = self.loadTextures(atlas: "Slime_Idle", prefix: "slime_idle", startAt: 0, stopAt: 6)
-        self.walkTexture     = self.loadTextures(atlas: "Slime_Walk", prefix: "slime_walk", startAt: 0, stopAt: 10)
-        self.jumpTexture     = self.loadTextures(atlas: "Slime_Jump", prefix: "slime_jump", startAt: 0, stopAt: 19)
-        self.fastWalkTexture = self.loadTextures(atlas: "Slime_Fast_Walk", prefix: "slime_fast_walk", startAt: 0, stopAt: 10)
-        self.deathTexture    = self.loadTextures(atlas: "Slime_Death", prefix: "slime_death", startAt: 0, stopAt: 13)
+        self.idleTexture     = self.loadTextures(atlas: AppConstants.atlasNames.idleAtlas, prefix: AppConstants.atlasPrefixes.idlePrefix, startAt: 0, stopAt: 6)
+        self.walkTexture     = self.loadTextures(atlas: AppConstants.atlasNames.walkAtlas, prefix: AppConstants.atlasPrefixes.walkPrefix, startAt: 0, stopAt: 10)
+        self.deathTexture    = self.loadTextures(atlas: AppConstants.atlasNames.deathAtlas, prefix: AppConstants.atlasPrefixes.deathPrefix, startAt: 0, stopAt: 13)
         self.name            = AppConstants.dataKeys.slime.rawValue
         self.anchorPoint     = CGPoint(x: 0.5, y: 0.5)
         self.setScale(1)
@@ -53,16 +49,6 @@ final class SlimeNode: SKSpriteNode {
         removeAction(forKey: SlimeAnimationType.idle.rawValue)
         startAnimation(textures: walkTexture, speed: 0.1, name: SlimeAnimationType.walk.rawValue, count: 0, resize: true, restore: true)
     }
-    func jumpState(){
-        guard let jumpTexture = jumpTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        removeAction(forKey: SlimeAnimationType.idle.rawValue)
-        removeAction(forKey: SlimeAnimationType.walk.rawValue)
-        startAnimation(textures: jumpTexture, speed: 0.1, name: SlimeAnimationType.jump.rawValue, count: 0, resize: true, restore: true)
-    }
-    func fastWalkState(){
-        guard let fastWalkTexture = fastWalkTexture else { preconditionFailure(AppConstants.errors.animationError) }
-        startAnimation(textures: fastWalkTexture, speed: 0.1, name: SlimeAnimationType.fastWalk.rawValue, count: 0, resize: true, restore: true)
-    }
     func deathState(){
         guard let deathTexture = deathTexture else { preconditionFailure(AppConstants.errors.animationError) }
         removeAction(forKey: SlimeAnimationType.walk.rawValue)
@@ -78,5 +64,4 @@ final class SlimeNode: SKSpriteNode {
         let moveAction          = SKAction.move(to: newPos, duration: speed)
         run(moveAction)
     }
-
 }

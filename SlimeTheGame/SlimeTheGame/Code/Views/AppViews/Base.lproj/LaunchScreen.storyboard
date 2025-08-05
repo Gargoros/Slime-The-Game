@@ -16,16 +16,54 @@
                     <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+<<<<<<< HEAD
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+=======
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="slimeBG_01" translatesAutoresizingMaskIntoConstraints="NO" id="x6S-AU-8jt">
+                                <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="slimeBG_02" translatesAutoresizingMaskIntoConstraints="NO" id="XZb-Gn-46f">
+                                <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="slimeBG_03" translatesAutoresizingMaskIntoConstraints="NO" id="eVp-KK-Gq6">
+                                <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="slimeBG_04" translatesAutoresizingMaskIntoConstraints="NO" id="zOz-FC-dXr">
+                                <rect key="frame" x="0.0" y="0.0" width="852" height="393"/>
+                            </imageView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="zOz-FC-dXr" secondAttribute="trailing" id="1Iz-tN-nkl"/>
+                            <constraint firstAttribute="bottom" secondItem="x6S-AU-8jt" secondAttribute="bottom" id="H4p-G8-dLw"/>
+                            <constraint firstAttribute="trailing" secondItem="x6S-AU-8jt" secondAttribute="trailing" id="KVf-FF-I7g"/>
+                            <constraint firstItem="x6S-AU-8jt" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="RZd-NU-TEm"/>
+                            <constraint firstItem="x6S-AU-8jt" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="UuX-1D-zW2"/>
+                            <constraint firstItem="zOz-FC-dXr" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="ZOD-lO-ibp"/>
+                            <constraint firstItem="zOz-FC-dXr" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="cYg-fp-rrM"/>
+                            <constraint firstAttribute="bottom" secondItem="zOz-FC-dXr" secondAttribute="bottom" id="ep4-6V-C2P"/>
+                        </constraints>
+>>>>>>> 3c3c648 (feat: added sounds effect, removed raw strings to constants and added user defaults)
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="53" y="375"/>
+            <point key="canvasLocation" x="52.816901408450704" y="374.80916030534348"/>
         </scene>
     </scenes>
     <resources>
+<<<<<<< HEAD
+=======
+        <image name="slimeBG_01" width="1152" height="640"/>
+        <image name="slimeBG_02" width="1152" height="1088"/>
+        <image name="slimeBG_03" width="1152" height="1088"/>
+        <image name="slimeBG_04" width="1152" height="1088"/>
+>>>>>>> 3c3c648 (feat: added sounds effect, removed raw strings to constants and added user defaults)
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

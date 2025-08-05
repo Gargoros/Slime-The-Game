@@ -1,6 +1,7 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 final class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     //MARK: - Properties
@@ -21,38 +22,72 @@ final class GameScene: SKScene, SKPhysicsContactDelegate, ObservableObject {
     private var level: Int             = 1 { didSet { levelLabel.text = AppConstants.gameText.level + "\(level)" } }
     private var gameScore: Int         = 0 { didSet { scoreLabel.text = AppConstants.gameText.score + "\(gameScore)" } }
     private var gameInProgress         = false
+    
+    private var lastSoundSetting: Bool = SlimeAppUserDefaults.isSound
+    private var bgAudioNode   = SKAudioNode()
+    private var forestAudioNode   = SKAudioNode()
+    
+    private let gameOverSound = SKAction.playSoundFileNamed(AppConstants.soundNames.gameOverSound, waitForCompletion: false)
+    private let tapSound      = SKAction.playSoundFileNamed(AppConstants.soundNames.tapSound, waitForCompletion: false)
     //MARK: - Init
     override func didMove(to view: SKView) {
         super.didMove(to: view)
         sceneSetup()
+        NotificationCenter.default.addObserver(self, selector: #selector(appWillResignActive), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidBecomeActive), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
-    override func update(_ currentTime: TimeInterval) { checkForRemainingDrops() }
+    override func update(_ currentTime: TimeInterval) {
+        checkForRemainingDrops()
+        checkSoundSetting()
+    }
+    deinit { NotificationCenter.default.removeObserver(self) }
+    @objc private func appWillResignActive() {
+        gamePaused()
+        bgAudioNode.run(SKAction.pause())
+        forestAudioNode.run(SKAction.pause())
+    }
+    @objc private func appDidBecomeActive() {
+        gameResume()
+        if SlimeAppUserDefaults.isSound {
+            bgAudioNode.run(SKAction.play())
+            forestAudioNode.run(SKAction.play())
+        }
+    }
 }
-
 //MARK: - Scene setups
 extension GameScene {
     private func sceneSetup(){
         physicsWorld.contactDelegate = self
+        audioEngine.mainMixerNode.outputVolume = 0.0
         sceneBackground()
+        sceneFloorBGSetup()
         sceneFloorSetup()
         sceneSlimeSetup()
         sceneLabelsSetup()
         showMessage(AppConstants.gameText.tapText)
+        playBackgroundSound()
     }
     private func sceneBackground(){
-        let backgroundImageNames   = ["slimeBG_01", "slimeBG_02", "slimeBG_03", "slimeBG_04"]
+        let backgroundImageNames   = AppConstants.backgroundImageNames
         for imageName in backgroundImageNames {
             let background         = SKSpriteNode(imageNamed: imageName)
-            background.anchorPoint = CGPoint(x: 0.0, y: 0.0)
-            background.position    = CGPoint(x: 0.0, y: 0.0)
-            background.size        = CGSize(width: frame.width, height: frame.height)
+            background.position    = CGPoint(x: frame.midX, y: frame.midY)
+            background.size        = CGSize(width: frame.width, height: frame.height * 1.5)
             background.zPosition   = SceneLayer.background.rawValue
             addChild(background)
         }
     }
+    private func sceneFloorBGSetup(){
+        let floorBG       = SKNode()
+        floorBG.name      = AppConstants.dataKeys.floorBG.rawValue
+        floorBG.zPosition = SceneLayer.floorBG.rawValue
+        floorBG.position  =  CGPoint(x: frame.minX, y: frame.minY - frame.height * 0.03)
+        floorBG.setupScrollingView(imageName: AppConstants.imageNames.floorBG, layer: SceneLayer.floorBG, blocks: 3, speed: 30.0)
+        addChild(floorBG)
+    }
     private func sceneFloorSetup(){
         sceneFloor.position = CGPoint(x: frame.midX, y: frame.minY)
-        sceneFloor.size     = CGSize(width: frame.width, height: frame.height * 0.13)
+        sceneFloor.size     = CGSize(width: frame.width, height: frame.height * 0.15)
         addChild(sceneFloor)
     }
     private func sceneSlimeSetup(){
@@ -77,7 +112,6 @@ extension GameScene {
     private func spawnMultipleGems() {
         hideMessage()
         gameInProgress = true
-        
         if gameInProgress == false {
             gameScore  = 0
             level      = 1
@@ -100,7 +134,7 @@ extension GameScene {
         let spawn        = SKAction.run { [unowned self] in self.spawnGem() }
         let sequence     = SKAction.sequence([wait, spawn])
         let repeatAction = SKAction.repeat(sequence, count: numberOfDrop)
-        run(repeatAction, withKey: "gem")
+        run(repeatAction, withKey: AppConstants.dataKeys.gem.rawValue)
     }
     private func sceneLabelsSetup(){
         //MARK: - Score label
@@ -143,7 +177,7 @@ extension GameScene {
         addChild(messageLabel)
     }
     private func hideMessage(){
-        if let messageLabel = childNode(withName: "//message") as? SKLabelNode {
+        if let messageLabel = childNode(withName: AppConstants.nodeNames.message) as? SKLabelNode {
             messageLabel.run(SKAction.sequence([ SKAction.fadeOut(withDuration: 0.25), SKAction.removeFromParent() ]))
         }
     }
@@ -155,7 +189,7 @@ extension GameScene {
         gameInProgress = false
         slime.deathState()
         removeAction(forKey: AppConstants.dataKeys.slime.rawValue)
-        enumerateChildNodes(withName: "//collect_*") { node, stop in
+        enumerateChildNodes(withName: AppConstants.nodeNames.allGameName) { node, stop in
             node.removeAction(forKey: AppConstants.dataKeys.drop.rawValue)
             node.physicsBody = nil
         }
@@ -169,7 +203,7 @@ extension GameScene {
     }
     private func popRemainingDrops(){
         var i = 0
-        enumerateChildNodes(withName: "//collect_*") { node, stop in
+        enumerateChildNodes(withName: AppConstants.nodeNames.allGameName) { node, stop in
             let initialWait      = SKAction.wait(forDuration: 1.0)
             let wait             = SKAction.wait(forDuration: TimeInterval(0.15 * CGFloat(i)))
             let removeFromParent = SKAction.removeFromParent()
@@ -189,20 +223,28 @@ extension GameScene {
             self.spawnMultipleGems()
         })
     }
+    private func gamePaused() { isPaused = true }
+    private func gameResume() { isPaused = false }
+    private func gameRestart() {
+        gameResume()
+        gameScore = 0
+    }
+    
 }
 //MARK: - Scene touches
 extension GameScene{
-    
     private func touchDown(atPoint pos: CGPoint){
         let touchedNode = atPoint(pos)
         if touchedNode.name == AppConstants.dataKeys.slime.rawValue { movingSlime = true }
         let distance = hypot(pos.x - slime.position.x, pos.y - slime.position.y)
         let calculatedSpeed = TimeInterval(distance / slimeSpeed) / 255
         if pos.x < slime.position.x {
+            playTap()
             slime.moveToPosition(pos: pos, direction: AppConstants.dataKeys.left.rawValue, speed: calculatedSpeed)
             slime.walkState()
         }
         else {
+            playTap()
             slime.moveToPosition(pos: pos, direction: AppConstants.dataKeys.right.rawValue, speed: calculatedSpeed)
             slime.walkState()
         }
@@ -221,7 +263,6 @@ extension GameScene{
         movingSlime = false
         slime.idleState()
     }
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches { self.touchDown(atPoint: touch.location(in: self)) }
         if gameInProgress == false {
@@ -260,5 +301,42 @@ extension GameScene {
             }
         }
     }
-    
+}
+//MARK: - Scene sounds
+extension GameScene {
+    private func checkSoundSetting() {
+        let currentSetting = SlimeAppUserDefaults.isSound
+        if currentSetting != lastSoundSetting {
+            playBackgroundSound()
+            lastSoundSetting = currentSetting
+        }
+    }
+    private func playBackgroundSound() {
+        if SlimeAppUserDefaults.isSound {
+            bgAudioNode = SKAudioNode(fileNamed: AppConstants.soundNames.bgSound)
+            bgAudioNode.autoplayLooped = true
+            bgAudioNode.isPositional = false
+            bgAudioNode.run(SKAction.changeVolume(to: 0.0, duration: 0.0))
+            addChild(bgAudioNode)
+            forestAudioNode = SKAudioNode(fileNamed: AppConstants.soundNames.forestSound)
+            forestAudioNode.autoplayLooped = true
+            forestAudioNode.isPositional = false
+            forestAudioNode.run(SKAction.changeVolume(to: 0.0, duration: 0.0))
+            addChild(forestAudioNode)
+            run(SKAction.wait(forDuration: 1.0)) { [unowned self] in
+                self.audioEngine.mainMixerNode.outputVolume = 1.0
+                self.bgAudioNode.run(SKAction.changeVolume(to: 0.2, duration: 2.0))
+                self.forestAudioNode.run(SKAction.changeVolume(to: 0.2, duration: 2.0))
+                
+            }
+        } else {
+            bgAudioNode.removeFromParent()
+            forestAudioNode.removeFromParent()
+        }
+    }
+    private func playTap(){
+            let removeFromParent = SKAction.removeFromParent()
+            let actionGroup = SKAction.group([tapSound, removeFromParent])
+            self.run(actionGroup)
+    }
 }
