@@ -15,7 +15,7 @@ struct SlimeTheGameView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack{
-                SpriteView(scene: gameScene, debugOptions: [.showsPhysics, .showsNodeCount])
+                SpriteView(scene: gameScene)
             }
             .onAppear { setupGameScene(geometry.size) }
             .position(x: geometry.size.width * 0.5, y: geometry.size.height * 0.5)
@@ -28,8 +28,4 @@ struct SlimeTheGameView: View {
         gameScene.scaleMode = .resizeFill
         gameScene.physicsWorld.contactDelegate = gameScene
     }
-}
-
-#Preview {
-    SlimeTheGameView(isPresented: .constant(true))
 }

@@ -93,6 +93,7 @@ final class CollectibleNode: SKSpriteNode {
         let actionSequence = SKAction.sequence([appear, scale, moveAction])
         self.scale(to: CGSize(width: 0.25, height: 0.7))
         self.run(actionSequence, withKey: AppConstants.dataKeys.drop.rawValue)
+        collectedEffect()
     }
     func collected(){
         let removeFromParent = SKAction.removeFromParent()
@@ -101,8 +102,17 @@ final class CollectibleNode: SKSpriteNode {
 
     }
     func missed(){
-        let removeFromParent = SKAction.removeFromParent()
-        let actionGroup = SKAction.group([missSound, removeFromParent])
+        let move = SKAction.moveBy(x: 0, y: -size.height / 1.5, duration: 0.0)
+        let splatX = SKAction.scaleX(to: 1.5, duration: 0.0)
+        let splatY = SKAction.scaleY(to: 0.5, duration: 0.0)
+        let actionGroup = SKAction.group([missSound, move, splatX, splatY])
         self.run(actionGroup)
+    }
+    func collectedEffect(){
+        let effectNode = SKEffectNode()
+        effectNode.shouldRasterize = true
+        addChild(effectNode)
+        effectNode.addChild(SKSpriteNode(texture: texture))
+        effectNode.filter = CIFilter(name: AppConstants.filterName.giFilterName, parameters:  [AppConstants.dataKeys.inputRadius.rawValue: 40.0])
     }
 }
