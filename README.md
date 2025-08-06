@@ -5,7 +5,7 @@ SwiftUI, SpriteKit, Particles, Sounds
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/blob/main/SlimeTheGame/SlimeTheGameScreenshots/screen01.png"
+    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/main/SlimeTheGame/SlimeTheGameScreenshots/screen01.png"
     alt="Simulator Screenshot 1"
     width="450" height="200"
     style="margin-right:10px;"
@@ -14,7 +14,7 @@ SwiftUI, SpriteKit, Particles, Sounds
 
 <p align="center">
     <img
-    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/tree/main/SlimeTheGame/SlimeTheGameScreenshots/screen02.png"
+    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/main/SlimeTheGame/SlimeTheGameScreenshots/screen02.png"
     alt="Simulator Screenshot 1"
     width="450" height="200"
     style="margin-right:10px;"
@@ -23,7 +23,7 @@ SwiftUI, SpriteKit, Particles, Sounds
 
 <p align="center">
     <img
-    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/tree/main/SlimeTheGame/SlimeTheGameScreenshots/screen03.png"
+    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/main/SlimeTheGame/SlimeTheGameScreenshots/screen03.png"
     alt="Simulator Screenshot 1"
     width="450" height="200"
     style="margin-right:10px;"
