@@ -3,17 +3,17 @@ import SpriteKit
 
 final class FloorNode: SKSpriteNode {
     //MARK: - Properties
-    private let floorTexture = SKTexture(imageNamed: "slimeFloor")
+    private let floorTexture = SKTexture(imageNamed: AppConstants.imageNames.floorImage)
     //MARK: - Init
-    init() {
-        super.init(texture: floorTexture, color: .clear, size: floorTexture.size())
+    init(sceneSize: CGRect) {
+        super.init(texture: floorTexture, color: .clear, size: CGSize(width: sceneSize.width, height: sceneSize.height * 0.15))
         floorSetup()
-        floorPhysicsBodySetup()
+        floorPhysicsBodySetup(sceneSize: sceneSize)
     }
     required init?(coder aDecoder: NSCoder) { fatalError(AppConstants.errors.nodeError) }
     private func floorSetup(){ self.zPosition = SceneLayer.floor.rawValue }
-    private func floorPhysicsBodySetup(){
-        self.physicsBody                     = SKPhysicsBody(rectangleOf: self.size)
+    private func floorPhysicsBodySetup(sceneSize: CGRect){
+        self.physicsBody                     = SKPhysicsBody(rectangleOf: CGSize(width: sceneSize.width, height: sceneSize.height * 0.15))
         self.physicsBody?.affectedByGravity  = false
         self.physicsBody?.isDynamic          = false
         self.physicsBody?.restitution        = 0.0

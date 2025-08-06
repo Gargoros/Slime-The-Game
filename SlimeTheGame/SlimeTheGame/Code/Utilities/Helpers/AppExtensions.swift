@@ -28,6 +28,45 @@ extension SKSpriteNode {
         }
         
     }
+    func endlessScroll(speed: TimeInterval) {
+        let moveAction = SKAction.moveBy(x: -self.size.width, y: 0, duration: speed)
+        let resetAction = SKAction.moveBy(x: self.size.width, y: 0, duration: speed)
+        let sequenceAction = SKAction.sequence([moveAction, resetAction])
+        let repeatAction = SKAction.repeatForever(sequenceAction)
+        self.run(repeatAction)
+    }
+}
+
+extension SKNode {
+    func setupScrollingView(imageName name: String, layer: SceneLayer, blocks: Int, speed: TimeInterval, emitterNamed: String?){
+        for i in 0..<blocks {
+            let spriteNode = SKSpriteNode(imageNamed: name)
+            spriteNode.anchorPoint = CGPoint.zero
+            spriteNode.position = CGPoint(x: CGFloat(i)  * spriteNode.size.width, y: 0)
+            spriteNode.zPosition = layer.rawValue
+            spriteNode.name = name
+            spriteNode.endlessScroll(speed: speed)
+            addChild(spriteNode)
+            if let emitterNamed = emitterNamed, let particles = SKEmitterNode(fileNamed: emitterNamed) {
+                particles.name = AppConstants.dataKeys.particles.rawValue
+                spriteNode.addChild(particles)
+            }
+        }
+    }
+}
+
+extension SKScene {
+    func sceneGameSound(_ gameSound: SKAction, completion: (() -> Void)? = nil) {
+        if SlimeAppUserDefaults.isSound {
+            let soundAction = gameSound
+            if let completion = completion {
+                let completionAction = SKAction.run(completion)
+                let sequence = SKAction.sequence([soundAction, completionAction])
+                run(sequence) }
+            else { run(soundAction) }
+        }
+        else { completion?() }
+    }
 }
 
 extension View {
