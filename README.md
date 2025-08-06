@@ -5,7 +5,7 @@ SwiftUI, SpriteKit, Particles, Sounds
 
 <p align="center">
   <img
-    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/tree/main/SlimeTheGame/SlimeTheGameScreenshots/screen01.png"
+    src="https://raw.githubusercontent.com/Gargoros/Slime-The-Game/blob/main/SlimeTheGame/SlimeTheGameScreenshots/screen01.png"
     alt="Simulator Screenshot 1"
     width="450" height="200"
     style="margin-right:10px;"
