@@ -11,12 +11,11 @@ enum AppConstants {
     enum font {
         static let regular: String = "Nosifer-Regular"
     }
-    enum fonts {
-        static let regular        = "Nosifer-Regular"
-    }
     enum gameText {
         static let tapText        = "Tap to start game"
-        static let gameOver       = "Game Over\nTap to try again"
+        static func gameOverText(score: Int) -> String {
+            return "Game Over\nBest: \(SlimeAppUserDefaults.bestScore)\nScore: \(score)\nTap to try again"
+        }
         static let getReady       = "Get Ready!"
         static let level          = "Level: "
         static let score          = "Score: "
@@ -28,6 +27,11 @@ enum AppConstants {
         static let gameOverSound  = "slimeGameOver"
         static let tapSound       = "slimeTheGameTapSound"
         static let forestSound    = "slimeForestSound"
+        
+        static let walkSound01    = "slimeWalkSound_01"
+        static let walkSound02    = "slimeWalkSound_02"
+        static let deathSound     = "slimeDeathSound"
+        static let idleSound      = "slimeIdleSound"
     }
     enum imageNames {
         static let floorBG        = "floorBG_01"
@@ -43,7 +47,6 @@ enum AppConstants {
         static let idleAtlas      = "Slime_Idle"
         static let walkAtlas      = "Slime_Walk"
         static let deathAtlas     = "Slime_Death"
-        
         static let blueAtlas      = "Blue_Gems"
         static let greenAtlas     = "Green_Gems"
         static let pinkAtlas      = "Pink_Gems"
@@ -68,17 +71,27 @@ enum AppConstants {
     enum particleNames {
         static let floorEffect    = "SlimeFloorSpark"
     }
+    enum filterName {
+        static let giFilterName   = "CIGaussianBlur"
+    }
     enum dataKeys: String {
+        case background
         case floorBG
         case particles
         case score
         case level
         case message
         case slime
+        case chomp
         case gem
+        case gemNumber
         case drop
         case left
         case right
+        case slimeWalkSound
+        case slimeIdleSound
+        case slimeDeathSound
+        case inputRadius
     }
     static let backgroundImageNames   = ["slimeBG_01", "slimeBG_02", "slimeBG_03", "slimeBG_04"]
 }
